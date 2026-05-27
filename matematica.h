@@ -1,0 +1,1 @@
+char *ordenadora(char *string);
