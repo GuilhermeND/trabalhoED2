@@ -1,3 +1,5 @@
+#include "pilha.h"
+
 float soma(float num1, float num2){
     return num1 + num2;
 }
@@ -42,21 +44,25 @@ float sqrt(float n) {
 }
 
 
-char *ordenadora(char *string){
+char *ordenadora(char *string, Pilha pilha){
     char i = *string;
     int tamanho = 0;
-    int qtdParentenses = 0;
+    int contador = 0;
     while(i != '\0'){
-        if(*(string + tamanho) == '(' || *(string + tamanho) == ')'){
-            qtdParentenses++;
-        }
         tamanho++;
         i = *(string + tamanho);
     }
-   int asize = tamanho - qtdParentenses;
-    char *ns = malloc((asize + 1) * sizeof(char));
+    char *ns = malloc((tamanho + 1) * sizeof(char));
     while(tamanho){
-        
+        if(*(string + contador) > 47 || *(string + contador) < 58){
+            *(ns + contador) = *(string + contador);
+        }else{
+            //processos da pilha
+        }
+        tamanho--;
+        contador++;
     }
+    free(string);
+    return ns;
 
 }

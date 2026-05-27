@@ -1,1 +1,1 @@
-char *ordenadora(char *string);
+char *ordenadora(char *string, Pilha pilha);

@@ -14,9 +14,7 @@ int main() {
 
     printf("Digite sua expressão: ");
     char *str = userInput(tamanho);
-    char *oldstr = str;
-    str = ordenadora(str);
-    free(oldstr);
+    str = ordenadora(str, pilhaOperadores);
     
 
 
