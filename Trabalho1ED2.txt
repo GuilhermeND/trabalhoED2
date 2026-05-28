@@ -1,0 +1,659 @@
+//Integrantes:
+    //Guilherme Gemniczak da Rocha  |  GRR20246173
+    //Eduardo Almeida Freitas da Silva Miranda  |  GRR20235363
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/* ========== ESTRUTURAS DE DADOS ========== */
+
+/* Estrutura para nó da árvore binária */
+typedef struct TreeNode {
+    int value;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+/* Estrutura para nó da pilha */
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+/* Estrutura para pilha */
+typedef struct _pilha{
+    Node* top;
+} Pilha;
+
+
+/* ========== FUNÇÕES DA PILHA ========== */
+
+void initPilha(Pilha* s) {
+    s->top = NULL;
+}
+
+int isEmpty(Pilha* s) {
+    return s->top == NULL;
+}
+
+int push(Pilha* s, int value) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Erro na alocação de memoria da pilha\n");
+        return 0;
+    }
+    newNode->data = value;
+    newNode->next = s->top;
+    s->top = newNode;
+    return 1;
+}
+
+int pop(Pilha* s, int* poppedValue) {
+    if (isEmpty(s)) {
+        printf("Nenhum elemento na pilha");
+        return 0;
+    }
+    Node* temp = s->top;
+    *poppedValue = temp->data;
+    s->top = s->top->next;
+    free(temp);
+    return 1;
+}
+
+int peek(Pilha* s, int* topValue) {
+    if (isEmpty(s)) {
+        printf("Nenhum elemento na pilha\n");
+        return 0;
+    }
+    *topValue = s->top->data;
+    return 1;
+}
+
+void freePilha(Pilha* s) {
+    Node* current = s->top;
+    while (current != NULL) {
+        Node* temp = current;
+        current = current->next;
+        free(temp);
+    }
+    s->top = NULL;
+}
+
+
+/* ========== FUNÇÕES DA ÁRVORE ========== */
+
+TreeNode *createNode(int value) {
+    TreeNode *newNode;
+    newNode = (TreeNode *) malloc(sizeof(TreeNode));
+    if (newNode == NULL) {
+        printf("Memory allocation error\n");
+        exit(1);
+    }
+    newNode->value = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+TreeNode *insertNode(TreeNode *root, int value) {
+    if (root == NULL) {
+        return createNode(value);
+    }
+    if (value < root->value) {
+        root->left = insertNode(root->left, value);
+    }
+    else if (value > root->value) {
+        root->right = insertNode(root->right, value);
+    }
+    return root;
+}
+
+TreeNode *findMin(TreeNode *root) {
+    while (root != NULL && root->left != NULL) {
+        root = root->left;
+    }
+    return root;
+}
+
+TreeNode *deleteNode(TreeNode *root, int value) {
+    TreeNode *temp;
+    if (root == NULL) {
+        return root;
+    }
+    if (value < root->value) {
+        root->left = deleteNode(root->left, value);
+    }
+    else if (value > root->value) {
+        root->right = deleteNode(root->right, value);
+    }
+    else {
+        if (root->left == NULL) {
+            temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if (root->right == NULL) {
+            temp = root->left;
+            free(root);
+            return temp;
+        }
+        temp = findMin(root->right);
+        root->value = temp->value;
+        root->right = deleteNode(root->right, temp->value);
+    }
+    return root;
+}
+
+void freeTree(TreeNode *root) {
+    if (root == NULL)
+        return;
+    freeTree(root->left);
+    freeTree(root->right);
+    free(root);
+}
+
+void printInOrder(TreeNode *root) {
+    if (root == NULL)
+        return;
+    printInOrder(root->left);
+    if (
+        root->value == '+' ||
+        root->value == '-' ||
+        root->value == '*' ||
+        root->value == '/' ||
+        root->value == '$' ||
+        root->value == 'r'
+    ) {
+        printf("%c ", root->value);
+    }
+    else {
+        printf("%d ", root->value);
+    }
+    printInOrder(root->right);
+}
+
+void printPreOrder(TreeNode *root) {
+    if (root == NULL)
+        return;
+    if (
+        root->value == '+' ||
+        root->value == '-' ||
+        root->value == '*' ||
+        root->value == '/' ||
+        root->value == '$' ||
+        root->value == 'r'
+    ) {
+        printf("%c ", root->value);
+    }
+    else {
+        printf("%d ", root->value);
+    }
+    printPreOrder(root->left);
+    printPreOrder(root->right);
+}
+
+void printPostOrder(TreeNode *root) {
+    if (root == NULL)
+        return;
+    printPostOrder(root->left);
+    printPostOrder(root->right);
+    if (
+        root->value == '+' ||
+        root->value == '-' ||
+        root->value == '*' ||
+        root->value == '/' ||
+        root->value == '$' ||
+        root->value == 'r'
+    ) {
+        printf("%c ", root->value);
+    }
+    else {
+        printf("%d ", root->value);
+    }
+}
+
+
+/* ========== FUNÇÕES MATEMÁTICAS ========== */
+
+int soma(float num1, float num2, float *resultado){
+    *resultado = num1 + num2;
+    return 1;
+}
+
+int sub(float num1, float num2, float *resultado){
+    *resultado = num1 - num2;
+    return 1;
+}
+
+int multi(float num1, float num2, float *resultado){
+    *resultado = num1 * num2;
+    return 1;
+}
+
+int division(float num1, float num2, float *resultado){
+    if (num2 == 0) {
+        return 0;
+    }
+    *resultado = num1 / num2;
+    return 1;
+}
+
+int powF(float base, float expo, float *resultado) {
+    *resultado = 1;
+    while (expo > 0) {
+        *resultado *= base;
+        expo--;
+    }
+    return 1;
+}
+
+int sqrtF(float n, float *resultado) {
+    if (n < 0) {
+        return 0;
+    }
+    if (n == 0) {
+        *resultado = 0;
+        return 1;
+    }
+    float x = n;
+    float prev;
+    float epsilon = 0.001f;
+    do {
+        prev = x;
+        x = (x + n / x) / 2.0f;
+    } while ((x - prev > epsilon) || (prev - x > epsilon));
+    *resultado = x;
+    return 1;
+}
+
+char *ordenadora(char *string, Pilha *pilha) {
+    int tamanho = 0;
+    while (*(string + tamanho) != '\0') {
+        tamanho++;
+    }
+    char *ns = malloc((tamanho * 3 + 1) * sizeof(char));
+    if (ns == NULL) {
+        return NULL;
+    }
+    int i = 0;
+    int j = 0;
+    while (*(string + i) != '\0') {
+        char c = *(string + i);
+        
+        // ignora espaços
+        if (c == ' ') {
+            i++;
+            continue;
+        }
+        
+        // sqrt
+        if (
+            *(string + i) == 's' &&
+            *(string + i + 1) == 'q' &&
+            *(string + i + 2) == 'r' &&
+            *(string + i + 3) == 't'
+        ) {
+            push(pilha, 'r');
+            i += 4;
+            continue;
+        }
+        
+        // número ou negativo
+        if (
+            (c >= '0' && c <= '9')
+            ||
+            (
+                c == '-' &&
+                (
+                    i == 0 ||
+                    *(string + i - 1) == '(' ||
+                    *(string + i - 1) == '+' ||
+                    *(string + i - 1) == '-' ||
+                    *(string + i - 1) == '*' ||
+                    *(string + i - 1) == '/' ||
+                    *(string + i - 1) == '$'
+                )
+            )
+        ) {
+            // negativo unário
+            if (c == '-') {
+                *(ns + j) = '0';
+                j++;
+                *(ns + j) = ' ';
+                j++;
+                push(pilha, '-');
+                i++;
+            }
+            
+            while (*(string + i) >= '0' && *(string + i) <= '9') {
+                *(ns + j) = *(string + i);
+                i++;
+                j++;
+            }
+            
+            *(ns + j) = ' ';
+            j++;
+            continue;
+        }
+        
+        // abre parenteses
+        if (c == '(') {
+            push(pilha, c);
+        }
+        
+        // fecha parenteses
+        else if (c == ')') {
+            int topo;
+            peek(pilha, &topo);
+            while (topo != '(') {
+                pop(pilha, &topo);
+                *(ns + j) = topo;
+                j++;
+                *(ns + j) = ' ';
+                j++;
+                peek(pilha, &topo);
+            }
+            
+            // remove '('
+            pop(pilha, &topo);
+            
+            // se tiver raiz antes do parenteses
+            if (!isEmpty(pilha)) {
+                peek(pilha, &topo);
+                if (topo == 'r') {
+                    pop(pilha, &topo);
+                    *(ns + j) = topo;
+                    j++;
+                    *(ns + j) = ' ';
+                    j++;
+                }
+            }
+        }
+        
+        // operadores
+        else if (
+            c == '+' ||
+            c == '-' ||
+            c == '*' ||
+            c == '/' ||
+            c == '$'
+        ) {
+            int topo;
+            while (
+                !isEmpty(pilha) &&
+                peek(pilha, &topo) &&
+                topo != '(' &&
+                (
+                    (c == '+' || c == '-') &&
+                    (
+                        topo == '+' ||
+                        topo == '-' ||
+                        topo == '*' ||
+                        topo == '/' ||
+                        topo == '$' ||
+                        topo == 'r'
+                    )
+                    ||
+                    (c == '*' || c == '/') &&
+                    (
+                        topo == '*' ||
+                        topo == '/' ||
+                        topo == '$' ||
+                        topo == 'r'
+                    )
+                )
+            ) {
+                pop(pilha, &topo);
+                *(ns + j) = topo;
+                j++;
+                *(ns + j) = ' ';
+                j++;
+            }
+            
+            push(pilha, c);
+        }
+        
+        i++;
+    }
+    
+    int topo;
+    while (!isEmpty(pilha)) {
+        pop(pilha, &topo);
+        *(ns + j) = topo;
+        j++;
+        *(ns + j) = ' ';
+        j++;
+    }
+    
+    *(ns + j) = '\0';
+    free(string);
+    return ns;
+}
+
+TreeNode *inserirExpressao(char *string) {
+    int tamanho = 0;
+    while (*(string + tamanho) != '\0') {
+        tamanho++;
+    }
+    
+    TreeNode **pilha = malloc(tamanho * sizeof(TreeNode *));
+    if (pilha == NULL) {
+        return NULL;
+    }
+    
+    int topo = -1;
+    int i = 0;
+    
+    while (*(string + i) != '\0') {
+        char c = *(string + i);
+        
+        // ignora espaços
+        if (c == ' ') {
+            i++;
+            continue;
+        }
+        
+        // número
+        if (c >= '0' && c <= '9') {
+            int numero = 0;
+            while (*(string + i) >= '0' && *(string + i) <= '9') {
+                numero = numero * 10 + (*(string + i) - '0');
+                i++;
+            }
+            pilha[++topo] = createNode(numero);
+            continue;
+        }
+        
+        // raiz quadrada
+        if (c == 'r') {
+            TreeNode *novo = createNode(c);
+            novo->right = pilha[topo--];
+            novo->left = NULL;
+            pilha[++topo] = novo;
+        }
+        
+        // operadores
+        else if (
+            c == '+' ||
+            c == '-' ||
+            c == '*' ||
+            c == '/' ||
+            c == '$'
+        ) {
+            TreeNode *novo = createNode(c);
+            novo->right = pilha[topo--];
+            novo->left = pilha[topo--];
+            pilha[++topo] = novo;
+        }
+        
+        i++;
+    }
+    
+    TreeNode *raiz = pilha[topo];
+    free(pilha);
+    return raiz;
+}
+
+int calcularExpressao(TreeNode *root, float *resultado) {
+    if (root == NULL) {
+        return 0;
+    }
+    
+    // nó folha
+    if (root->left == NULL && root->right == NULL) {
+        *resultado = root->value;
+        return 1;
+    }
+    
+    // sqrt
+    if (root->value == 'r') {
+        float direita;
+        if (!calcularExpressao(root->right, &direita)) {
+            return 0;
+        }
+        return sqrtF(direita, resultado);
+    }
+    
+    float esquerda;
+    float direita;
+    
+    if (!calcularExpressao(root->left, &esquerda)) {
+        return 0;
+    }
+    
+    if (!calcularExpressao(root->right, &direita)) {
+        return 0;
+    }
+    
+    switch (root->value) {
+        case '+':
+            return soma(esquerda, direita, resultado);
+        case '-':
+            return sub(esquerda, direita, resultado);
+        case '*':
+            return multi(esquerda, direita, resultado);
+        case '/':
+            return division(esquerda, direita, resultado);
+        case '$':
+            return powF(esquerda, direita, resultado);
+    }
+    
+    return 0;
+}
+
+
+/* ========== FUNÇÕES UTILITÁRIAS ========== */
+
+char *userInput(int buffer){
+    int i = 0;
+    char *str = malloc(buffer * sizeof(char));
+    
+    if (str == NULL) {
+        printf("Erro de memoria\n");
+        return NULL;
+    }
+    
+    char c;
+    while ((c = getchar()) != '\n') {
+        if (i >= buffer - 1) {
+            buffer *= 2;
+            char *temp = realloc(str, buffer);
+            if (temp == NULL) {
+                free(str);
+                printf("Erro de memoria\n");
+                return NULL;
+            }
+            str = temp;
+        }
+        str[i++] = c;
+    }
+    
+    str[i] = '\0';
+    return str;
+}
+
+
+/* ========== FUNÇÃO PRINCIPAL ========== */
+
+int main() {
+    int continuar = 1;
+    int quantidade = 0;
+    int tamanho = 10;
+    
+    char **expressoes = NULL;
+    TreeNode **arvores = NULL;
+    float *resultados = NULL;
+    int *validos = NULL;
+    
+    while (continuar) {
+        Pilha pilhaOperadores;
+        initPilha(&pilhaOperadores);
+        
+        printf("\nDigite sua expressao: ");
+        char *str = userInput(tamanho);
+        
+        str = ordenadora(str, &pilhaOperadores);
+        TreeNode *arvore = inserirExpressao(str);
+        
+        float resultado = 0;
+        int valido = calcularExpressao(arvore, &resultado);
+        
+        quantidade++;
+        
+        expressoes = realloc(expressoes, quantidade * sizeof(char *));
+        arvores = realloc(arvores, quantidade * sizeof(TreeNode *));
+        resultados = realloc(resultados, quantidade * sizeof(float));
+        validos = realloc(validos, quantidade * sizeof(int));
+        
+        if (
+            expressoes == NULL ||
+            arvores == NULL ||
+            resultados == NULL ||
+            validos == NULL
+        ) {
+            printf("\nErro de memoria\n");
+            return 1;
+        }
+        
+        expressoes[quantidade - 1] = str;
+        arvores[quantidade - 1] = arvore;
+        resultados[quantidade - 1] = resultado;
+        validos[quantidade - 1] = valido;
+        
+        freePilha(&pilhaOperadores);
+        
+        printf("\nDeseja inserir outra expressao? (1 = sim / 0 = nao): ");
+        scanf("%d", &continuar);
+        getchar();
+    }
+    
+    printf("\n========== RESULTADOS ==========\n");
+    
+    for (int i = 0; i < quantidade; i++) {
+        printf("\nExpressao %d:\n", i + 1);
+        printf("Posfixa: %s\n", expressoes[i]);
+        printf("PreOrder: ");
+        printPreOrder(arvores[i]);
+        printf("\nInOrder: ");
+        printInOrder(arvores[i]);
+        printf("\nPostOrder: ");
+        printPostOrder(arvores[i]);
+        
+        if (validos[i]) {
+            printf("\nResultado: %f\n", resultados[i]);
+        }
+        else {
+            printf("\nExpressao invalida\n");
+        }
+        
+        freeTree(arvores[i]);
+        free(expressoes[i]);
+    }
+    
+    free(expressoes);
+    free(arvores);
+    free(resultados);
+    free(validos);
+    
+    return 0;
+}
