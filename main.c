@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "utils.h"
 #include "arvore.h"
@@ -13,6 +14,7 @@ int main() {
     int tamanho = 10;
 
     char **expressoes = NULL;
+    char **expressoesOriginais = NULL;
     TreeNode **arvores = NULL;
     float *resultados = NULL;
     int *validos = NULL;
@@ -26,6 +28,8 @@ int main() {
 
         char *str = userInput(tamanho);
 
+        char *original = strdup(str);
+
         str = ordenadora(str, &pilhaOperadores);
 
         TreeNode *arvore = inserirExpressao(str);
@@ -37,12 +41,14 @@ int main() {
         quantidade++;
 
         expressoes = realloc(expressoes, quantidade * sizeof(char *));
+        expressoesOriginais = realloc(expressoesOriginais, quantidade * sizeof(char *));
         arvores = realloc(arvores, quantidade * sizeof(TreeNode *));
         resultados = realloc(resultados, quantidade * sizeof(float));
         validos = realloc(validos, quantidade * sizeof(int));
 
         if (
             expressoes == NULL ||
+            expressoesOriginais == NULL ||
             arvores == NULL ||
             resultados == NULL ||
             validos == NULL
@@ -54,6 +60,7 @@ int main() {
         }
 
         expressoes[quantidade - 1] = str;
+        expressoesOriginais[quantidade - 1] = original;
         arvores[quantidade - 1] = arvore;
         resultados[quantidade - 1] = resultado;
         validos[quantidade - 1] = valido;
@@ -70,7 +77,7 @@ int main() {
 
     for (int i = 0; i < quantidade; i++) {
 
-        printf("\nExpressao %d:\n", i + 1);
+        printf("\nExpressao %d: %s\n", i + 1, expressoesOriginais[i]);
 
         printf("Posfixa: %s\n", expressoes[i]);
 
@@ -84,7 +91,7 @@ int main() {
         printPostOrder(arvores[i]);
 
         if (validos[i]) {
-            printf("\nResultado: %f\n", resultados[i]);
+            printf("\nResultado: %.2f\n", resultados[i]);
         }
 
         else {
@@ -93,12 +100,15 @@ int main() {
 
         freeTree(arvores[i]);
         free(expressoes[i]);
+        free(expressoesOriginais[i]);
+        printf("--------------------------------\n");
     }
 
     printf("\nPressione ENTER para encerrar o programa...");
     getchar();
 
     free(expressoes);
+    free(expressoesOriginais);
     free(arvores);
     free(resultados);
     free(validos);
