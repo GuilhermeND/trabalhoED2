@@ -95,6 +95,9 @@ int main() {
         free(expressoes[i]);
     }
 
+    printf("\nPressione ENTER para encerrar o programa...");
+    getchar();
+
     free(expressoes);
     free(arvores);
     free(resultados);

@@ -1,3 +1,6 @@
+#ifndef PILHA_H
+#define PILHA_H
+
 typedef struct Node {
     int data;
     struct Node* next;
@@ -18,3 +21,5 @@ int pop(Pilha* s, int* poppedValue);
 int peek(Pilha* s, int* topValue);
 
 void freePilha(Pilha* s); 
+
+#endif
