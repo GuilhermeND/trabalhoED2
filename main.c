@@ -13,13 +13,12 @@ int main() {
     float resultado = 0.0;
 
 
-    printf("Digite sua expressão: ");
+    printf("Digite sua expressao: ");
     char *str = userInput(tamanho);
     str = ordenadora(str, pilhaOperadores);
     TreeNode *arvore = inserirExpressao(str);
     resultado = calcularExpressao(arvore);
-    printf("\nO resultado da expressão é: %f", resultado);
-
+    printf("\nO resultado da expressao e: %f", resultado);
 
 
     free(arvore);

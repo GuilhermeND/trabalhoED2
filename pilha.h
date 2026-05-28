@@ -3,7 +3,7 @@ typedef struct Node {
     struct Node* next;
 } Node;
 
-typedef struct {
+typedef struct _pilha{
     Node* top;
 } Pilha;
 

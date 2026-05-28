@@ -10,7 +10,7 @@ char *userInput(int buffer){
 
     if (str == NULL) {
         printf("Erro de memoria\n");
-        return 1;
+        return NULL;
     }
 
     char c;
@@ -24,7 +24,7 @@ char *userInput(int buffer){
             if (temp == NULL) {
                 free(str);
                 printf("Erro de memoria\n");
-                return 1;
+                return NULL;
             }
 
             str = temp;

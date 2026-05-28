@@ -14,11 +14,11 @@ float multi(float num1, float num2){
     return num1 *  num2;
 }
 
-float div(float num1, float num2){
+float division(float num1, float num2){
     return num1 / num2;
 }
 
-float pow(float num1, float expo){
+float powF(float num1, float expo){
     while(expo > 1){
         num1 = multi(num1, num1);
         expo--;
@@ -26,7 +26,7 @@ float pow(float num1, float expo){
     return num1;
 }
 
-float sqrt(float n) {
+float sqrtF(float n) {
     if (n < 0)
         return -1;
 
@@ -279,7 +279,7 @@ float calcularExpressao(TreeNode *root) {
 
     // raiz quadrada
     if (root->value == 'r') {
-        return sqrt(calcularExpressao(root->right));
+        return sqrtF(calcularExpressao(root->right));
     }
 
     float esquerda = calcularExpressao(root->left);
@@ -297,10 +297,10 @@ float calcularExpressao(TreeNode *root) {
             return multi(esquerda, direita);
 
         case '/':
-            return div(esquerda, direita);
+            return division(esquerda, direita);
 
         case '^':
-            return pow(esquerda, direita);
+            return powF(esquerda, direita);
     }
 
     return 0;
