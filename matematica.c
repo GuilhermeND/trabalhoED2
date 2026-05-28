@@ -100,7 +100,12 @@ char *ordenadora(char *string, Pilha *pilha) {
         }
 
         // sqrt
-        if (
+        if (*(string + i) == 'r') {
+            push(pilha, 'r');
+            i++;
+            continue;
+        }
+        else if (
             *(string + i) == 's' &&
             *(string + i + 1) == 'q' &&
             *(string + i + 2) == 'r' &&
@@ -173,6 +178,11 @@ char *ordenadora(char *string, Pilha *pilha) {
         // fecha parenteses
         else if (c == ')') {
 
+            if (isEmpty(pilha)) {
+                i++;
+                continue;
+            }
+
             int topo;
 
             peek(pilha, &topo);
@@ -187,26 +197,35 @@ char *ordenadora(char *string, Pilha *pilha) {
                 *(ns + j) = ' ';
                 j++;
 
+                if (isEmpty(pilha)) {
+                    break;
+                }
+
                 peek(pilha, &topo);
             }
 
             // remove '('
-            pop(pilha, &topo);
-
-            // se tiver raiz antes do parenteses
             if (!isEmpty(pilha)) {
-
                 peek(pilha, &topo);
-
-                if (topo == 'r') {
-
+                if (topo == '(') {
                     pop(pilha, &topo);
+                }
 
-                    *(ns + j) = topo;
-                    j++;
+                // se tiver raiz antes do parenteses
+                if (!isEmpty(pilha)) {
 
-                    *(ns + j) = ' ';
-                    j++;
+                    peek(pilha, &topo);
+
+                    if (topo == 'r') {
+
+                        pop(pilha, &topo);
+
+                        *(ns + j) = topo;
+                        j++;
+
+                        *(ns + j) = ' ';
+                        j++;
+                    }
                 }
             }
         }
@@ -404,23 +423,35 @@ int calcularExpressao(TreeNode *root, float *resultado) {
         return 0;
     }
 
+    int operacaoValida = 0;
+
     switch (root->value) {
 
         case '+':
-            return soma(esquerda, direita, resultado);
-
+            operacaoValida = soma(esquerda, direita, resultado);
+            break;
         case '-':
-            return sub(esquerda, direita, resultado);
-
+            operacaoValida = sub(esquerda, direita, resultado);
+            break;
         case '*':
-            return multi(esquerda, direita, resultado);
-
+            operacaoValida = multi(esquerda, direita, resultado);
+            break;
         case '/':
-            return division(esquerda, direita, resultado);
-
+            operacaoValida = division(esquerda, direita, resultado);
+            break;
         case '^':
-            return powF(esquerda, direita, resultado);
+            operacaoValida = powF(esquerda, direita, resultado);
+            break;
+        default:
+            return 0;
     }
 
-    return 0;
+    if (!operacaoValida) {
+        return 0;
+    }
+    if(*resultado < 0) {
+        return 0;
+    }
+
+    return 1;
 }

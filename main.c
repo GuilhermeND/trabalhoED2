@@ -99,7 +99,7 @@ int main() {
         }
 
         else {
-            printf("\nExpressao invalida\n");
+            printf("\nResultado: Erro Matematico (Divisao por zero ou Raiz de numero negativo)\n");
         }
 
         freeTree(arvores[i]);
