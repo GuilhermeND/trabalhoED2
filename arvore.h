@@ -17,6 +17,10 @@ TreeNode *createNode(int value);
 TreeNode *insertNode(TreeNode *root, int value);
 
 
+void printInOrder(TreeNode *root);
+void printPreOrder(TreeNode *root);
+void printPostOrder(TreeNode *root);
+
 void freeTree(TreeNode *root);
 
 #endif

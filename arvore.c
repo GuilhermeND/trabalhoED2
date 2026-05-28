@@ -118,3 +118,79 @@ void freeTree(TreeNode *root) {
 
     free(root);
 }
+
+
+void printInOrder(TreeNode *root) {
+
+    if (root == NULL)
+        return;
+
+    printInOrder(root->left);
+
+    if (
+        root->value == '+' ||
+        root->value == '-' ||
+        root->value == '*' ||
+        root->value == '/' ||
+        root->value == '$' ||
+        root->value == 'r'
+    ) {
+        printf("%c ", root->value);
+    }
+    else {
+        printf("%d ", root->value);
+    }
+
+    printInOrder(root->right);
+}
+
+
+
+void printPreOrder(TreeNode *root) {
+
+    if (root == NULL)
+        return;
+
+    if (
+        root->value == '+' ||
+        root->value == '-' ||
+        root->value == '*' ||
+        root->value == '/' ||
+        root->value == '$' ||
+        root->value == 'r'
+    ) {
+        printf("%c ", root->value);
+    }
+    else {
+        printf("%d ", root->value);
+    }
+
+    printPreOrder(root->left);
+
+    printPreOrder(root->right);
+}
+
+
+void printPostOrder(TreeNode *root) {
+
+    if (root == NULL)
+        return;
+
+    printPostOrder(root->left);
+
+    printPostOrder(root->right);
+    
+    if (
+        root->value == '+' ||
+        root->value == '-' ||
+        root->value == '*' ||
+        root->value == '/' ||
+        root->value == '$' ||
+        root->value == 'r'
+    ) {
+        printf("%c ", root->value);
+    }
+    else {
+        printf("%d ", root->value);
+    }
+}

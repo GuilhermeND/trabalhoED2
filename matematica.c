@@ -2,50 +2,75 @@
 #include "arvore.h"
 #include <stdlib.h>
 
-float soma(float num1, float num2){
-    return num1 + num2;
+int soma(float num1, float num2, float *resultado){
+    *resultado = num1 + num2;
+    return 1;
 }
 
-float sub(float num1, float num2){
-    return num1 - num2;
+int sub(float num1, float num2, float *resultado){
+    *resultado = num1 - num2;
+    return 1;
 }
 
-float multi(float num1, float num2){
-    return num1 *  num2;
+int multi(float num1, float num2, float *resultado){
+    *resultado = num1 * num2;
+    return 1;
 }
 
-float division(float num1, float num2){
-    return num1 / num2;
+int division(float num1, float num2, float *resultado){
+
+    if (num2 == 0) {
+        return 0;
+    }
+
+    *resultado = num1 / num2;
+
+    return 1;
 }
 
-float powF(float base, float expo) {
-    float resultado = 1;
+int powF(float base, float expo, float *resultado) {
+
+    *resultado = 1;
+
     while (expo > 0) {
-        resultado = multi(resultado, base);
+
+        *resultado *= base;
+
         expo--;
     }
-    return resultado;
+
+    return 1;
 }
 
-float sqrtF(float n) {
-    if (n < 0)
-        return -1;
+int sqrtF(float n, float *resultado) {
 
-    if (n == 0)
+    if (n < 0) {
         return 0;
+    }
+
+    if (n == 0) {
+
+        *resultado = 0;
+
+        return 1;
+    }
 
     float x = n;
     float prev;
     float epsilon = 0.001f;
 
     do {
+
         prev = x;
+
         x = (x + n / x) / 2.0f;
+
     } while ((x - prev > epsilon) || (prev - x > epsilon));
 
-    return x;
-}
+    *resultado = x;
 
+    return 1;
+}
 
 char *ordenadora(char *string, Pilha *pilha) {
 
@@ -55,7 +80,7 @@ char *ordenadora(char *string, Pilha *pilha) {
         tamanho++;
     }
 
-    char *ns = malloc((tamanho * 2 + 1) * sizeof(char));
+    char *ns = malloc((tamanho * 3 + 1) * sizeof(char));
 
     if (ns == NULL) {
         return NULL;
@@ -74,8 +99,56 @@ char *ordenadora(char *string, Pilha *pilha) {
             continue;
         }
 
-        // número
-        if (c >= '0' && c <= '9') {
+        // sqrt
+        if (
+            *(string + i) == 's' &&
+            *(string + i + 1) == 'q' &&
+            *(string + i + 2) == 'r' &&
+            *(string + i + 3) == 't'
+        ) {
+
+            push(pilha, 'r');
+
+            i += 4;
+
+            continue;
+        }
+
+        // número ou negativo
+        if (
+
+            (c >= '0' && c <= '9')
+
+            ||
+
+            (
+                c == '-' &&
+                (
+                    i == 0 ||
+
+                    *(string + i - 1) == '(' ||
+                    *(string + i - 1) == '+' ||
+                    *(string + i - 1) == '-' ||
+                    *(string + i - 1) == '*' ||
+                    *(string + i - 1) == '/' ||
+                    *(string + i - 1) == '$'
+                )
+            )
+        ) {
+
+            // negativo unário
+            if (c == '-') {
+
+                *(ns + j) = '0';
+                j++;
+
+                *(ns + j) = ' ';
+                j++;
+
+                push(pilha, '-');
+
+                i++;
+            }
 
             while (*(string + i) >= '0' && *(string + i) <= '9') {
 
@@ -91,11 +164,13 @@ char *ordenadora(char *string, Pilha *pilha) {
             continue;
         }
 
-        // parenteses
+        // abre parenteses
         if (c == '(') {
+
             push(pilha, c);
         }
 
+        // fecha parenteses
         else if (c == ')') {
 
             int topo;
@@ -136,18 +211,13 @@ char *ordenadora(char *string, Pilha *pilha) {
             }
         }
 
-        // raiz quadrada
-        else if (c == 'r') {
-            push(pilha, c);
-        }
-
         // operadores
         else if (
             c == '+' ||
             c == '-' ||
             c == '*' ||
             c == '/' ||
-            c == '^'
+            c == '$'
         ) {
 
             int topo;
@@ -158,17 +228,24 @@ char *ordenadora(char *string, Pilha *pilha) {
                 topo != '(' &&
                 (
                     (c == '+' || c == '-') &&
-                    (topo == '+' || topo == '-' || topo == '*' || topo == '/' || topo == '^' || topo == 'r')
+                    (
+                        topo == '+' ||
+                        topo == '-' ||
+                        topo == '*' ||
+                        topo == '/' ||
+                        topo == '$' ||
+                        topo == 'r'
+                    )
 
                     ||
 
                     (c == '*' || c == '/') &&
-                    (topo == '*' || topo == '/' || topo == '^' || topo == 'r')
-
-                    ||
-
-                    (c == '^') &&
-                    (topo == '^' || topo == 'r')
+                    (
+                        topo == '*' ||
+                        topo == '/' ||
+                        topo == '$' ||
+                        topo == 'r'
+                    )
                 )
             ) {
 
@@ -206,7 +283,6 @@ char *ordenadora(char *string, Pilha *pilha) {
 
     return ns;
 }
-
 
 TreeNode *inserirExpressao(char *string) {
 
@@ -270,7 +346,7 @@ TreeNode *inserirExpressao(char *string) {
             c == '-' ||
             c == '*' ||
             c == '/' ||
-            c == '^'
+            c == '$'
         ) {
 
             TreeNode *novo = createNode(c);
@@ -291,41 +367,59 @@ TreeNode *inserirExpressao(char *string) {
     return raiz;
 }
 
-float calcularExpressao(TreeNode *root) {
+int calcularExpressao(TreeNode *root, float *resultado) {
 
     if (root == NULL) {
         return 0;
     }
 
-    // nó folha = número
+    // nó folha
     if (root->left == NULL && root->right == NULL) {
-        return root->value;
+
+        *resultado = root->value;
+
+        return 1;
     }
 
-    // raiz quadrada
+    // sqrt
     if (root->value == 'r') {
-        return sqrtF(calcularExpressao(root->right));
+
+        float direita;
+
+        if (!calcularExpressao(root->right, &direita)) {
+            return 0;
+        }
+
+        return sqrtF(direita, resultado);
     }
 
-    float esquerda = calcularExpressao(root->left);
-    float direita = calcularExpressao(root->right);
+    float esquerda;
+    float direita;
+
+    if (!calcularExpressao(root->left, &esquerda)) {
+        return 0;
+    }
+
+    if (!calcularExpressao(root->right, &direita)) {
+        return 0;
+    }
 
     switch (root->value) {
 
         case '+':
-            return soma(esquerda, direita);
+            return soma(esquerda, direita, resultado);
 
         case '-':
-            return sub(esquerda, direita);
+            return sub(esquerda, direita, resultado);
 
         case '*':
-            return multi(esquerda, direita);
+            return multi(esquerda, direita, resultado);
 
         case '/':
-            return division(esquerda, direita);
+            return division(esquerda, direita, resultado);
 
-        case '^':
-            return powF(esquerda, direita);
+        case '$':
+            return powF(esquerda, direita, resultado);
     }
 
     return 0;
