@@ -131,7 +131,7 @@ char *ordenadora(char *string, Pilha *pilha) {
                     *(string + i - 1) == '-' ||
                     *(string + i - 1) == '*' ||
                     *(string + i - 1) == '/' ||
-                    *(string + i - 1) == '$'
+                    *(string + i - 1) == '^'
                 )
             )
         ) {
@@ -217,7 +217,7 @@ char *ordenadora(char *string, Pilha *pilha) {
             c == '-' ||
             c == '*' ||
             c == '/' ||
-            c == '$'
+            c == '^'
         ) {
 
             int topo;
@@ -233,7 +233,7 @@ char *ordenadora(char *string, Pilha *pilha) {
                         topo == '-' ||
                         topo == '*' ||
                         topo == '/' ||
-                        topo == '$' ||
+                        topo == '^' ||
                         topo == 'r'
                     )
 
@@ -243,7 +243,7 @@ char *ordenadora(char *string, Pilha *pilha) {
                     (
                         topo == '*' ||
                         topo == '/' ||
-                        topo == '$' ||
+                        topo == '^' ||
                         topo == 'r'
                     )
                 )
@@ -346,7 +346,7 @@ TreeNode *inserirExpressao(char *string) {
             c == '-' ||
             c == '*' ||
             c == '/' ||
-            c == '$'
+            c == '^'
         ) {
 
             TreeNode *novo = createNode(c);
@@ -418,7 +418,7 @@ int calcularExpressao(TreeNode *root, float *resultado) {
         case '/':
             return division(esquerda, direita, resultado);
 
-        case '$':
+        case '^':
             return powF(esquerda, direita, resultado);
     }
 

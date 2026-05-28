@@ -132,7 +132,7 @@ void printInOrder(TreeNode *root) {
         root->value == '-' ||
         root->value == '*' ||
         root->value == '/' ||
-        root->value == '$' ||
+        root->value == '^' ||
         root->value == 'r'
     ) {
         printf("%c ", root->value);
@@ -156,7 +156,7 @@ void printPreOrder(TreeNode *root) {
         root->value == '-' ||
         root->value == '*' ||
         root->value == '/' ||
-        root->value == '$' ||
+        root->value == '^' ||
         root->value == 'r'
     ) {
         printf("%c ", root->value);
@@ -185,7 +185,7 @@ void printPostOrder(TreeNode *root) {
         root->value == '-' ||
         root->value == '*' ||
         root->value == '/' ||
-        root->value == '$' ||
+        root->value == '^' ||
         root->value == 'r'
     ) {
         printf("%c ", root->value);
