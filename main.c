@@ -10,17 +10,19 @@ int main() {
     initPilha(&pilhaOperadores);
 
     int tamanho = 10;
+    float resultado = 0.0;
 
 
     printf("Digite sua expressão: ");
     char *str = userInput(tamanho);
     str = ordenadora(str, pilhaOperadores);
-    
+    TreeNode *arvore = inserirExpressao(str);
+    resultado = calcularExpressao(arvore);
+    printf("\nO resultado da expressão é: %f", resultado);
 
 
 
-
+    free(arvore);
     free(str);
-    freePilha(&pilhaOperadores);
     return 0;
 }
