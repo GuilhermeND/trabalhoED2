@@ -21,6 +21,8 @@ void printInOrder(TreeNode *root);
 void printPreOrder(TreeNode *root);
 void printPostOrder(TreeNode *root);
 
+void printTreeGrafico(TreeNode *root, int nivel);
+
 void freeTree(TreeNode *root);
 
 #endif

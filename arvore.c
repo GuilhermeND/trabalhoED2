@@ -194,3 +194,28 @@ void printPostOrder(TreeNode *root) {
         printf("%d ", root->value);
     }
 }
+
+void printTreeGrafico(TreeNode *root, int nivel) {
+    if (root == NULL) return;
+
+    printTreeGrafico(root->right, nivel + 1);
+
+    for (int i = 0; i < nivel; i++) {
+        printf("    ");
+    }
+
+    if (
+        root->value == '+' ||
+        root->value == '-' ||
+        root->value == '*' ||
+        root->value == '/' ||
+        root->value == '^' ||
+        root->value == 'r'
+    ) {
+        printf("(%c)\n", root->value);
+    } else {
+        printf("[%d]\n", root->value);
+    }
+
+    printTreeGrafico(root->left, nivel + 1);
+}

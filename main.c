@@ -81,6 +81,10 @@ int main() {
 
         printf("Posfixa: %s\n", expressoes[i]);
 
+        printf("Estrutura da Arvore:\n");
+        printTreeGrafico(arvores[i], 0);
+        printf("\n");
+
         printf("PreOrder: ");
         printPreOrder(arvores[i]);
 
