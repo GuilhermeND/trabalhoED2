@@ -18,15 +18,6 @@ TreeNode *createNode(int value);
 
 TreeNode *insertNode(TreeNode *root, int value);
 
-TreeNode *searchNode(TreeNode *root, int value);
-
-TreeNode *deleteNode(TreeNode *root, int value);
-
-TreeNode *findMin(TreeNode *root);
-
-void printInOrder(TreeNode *root);
-void printPreOrder(TreeNode *root);
-void printPostOrder(TreeNode *root);
 
 void freeTree(TreeNode *root);
 

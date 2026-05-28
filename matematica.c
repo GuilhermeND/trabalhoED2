@@ -18,12 +18,13 @@ float division(float num1, float num2){
     return num1 / num2;
 }
 
-float powF(float num1, float expo){
-    while(expo > 1){
-        num1 = multi(num1, num1);
+float powF(float base, float expo) {
+    float resultado = 1;
+    while (expo > 0) {
+        resultado = multi(resultado, base);
         expo--;
     }
-    return num1;
+    return resultado;
 }
 
 float sqrtF(float n) {
@@ -77,7 +78,9 @@ char *ordenadora(char *string, Pilha *pilha) {
         if (c >= '0' && c <= '9') {
 
             while (*(string + i) >= '0' && *(string + i) <= '9') {
+
                 *(ns + j) = *(string + i);
+
                 i++;
                 j++;
             }
@@ -88,12 +91,11 @@ char *ordenadora(char *string, Pilha *pilha) {
             continue;
         }
 
-        // abre parenteses
+        // parenteses
         if (c == '(') {
             push(pilha, c);
         }
 
-        // fecha parenteses
         else if (c == ')') {
 
             int topo;
@@ -113,7 +115,30 @@ char *ordenadora(char *string, Pilha *pilha) {
                 peek(pilha, &topo);
             }
 
+            // remove '('
             pop(pilha, &topo);
+
+            // se tiver raiz antes do parenteses
+            if (!isEmpty(pilha)) {
+
+                peek(pilha, &topo);
+
+                if (topo == 'r') {
+
+                    pop(pilha, &topo);
+
+                    *(ns + j) = topo;
+                    j++;
+
+                    *(ns + j) = ' ';
+                    j++;
+                }
+            }
+        }
+
+        // raiz quadrada
+        else if (c == 'r') {
+            push(pilha, c);
         }
 
         // operadores
@@ -133,17 +158,17 @@ char *ordenadora(char *string, Pilha *pilha) {
                 topo != '(' &&
                 (
                     (c == '+' || c == '-') &&
-                    (topo == '+' || topo == '-' || topo == '*' || topo == '/' || topo == '^')
+                    (topo == '+' || topo == '-' || topo == '*' || topo == '/' || topo == '^' || topo == 'r')
 
                     ||
 
                     (c == '*' || c == '/') &&
-                    (topo == '*' || topo == '/' || topo == '^')
+                    (topo == '*' || topo == '/' || topo == '^' || topo == 'r')
 
                     ||
 
                     (c == '^') &&
-                    (topo == '^')
+                    (topo == '^' || topo == 'r')
                 )
             ) {
 

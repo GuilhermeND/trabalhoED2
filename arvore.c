@@ -47,18 +47,6 @@ TreeNode *insertNode(TreeNode *root, int value) {
 
 
 
-TreeNode *searchNode(TreeNode *root, int value) {
-
-    if (root == NULL || root->value == value) {
-        return root;
-    }
-
-    if (value < root->value) {
-        return searchNode(root->left, value);
-    }
-
-    return searchNode(root->right, value);
-}
 
 
 
@@ -121,45 +109,6 @@ TreeNode *deleteNode(TreeNode *root, int value) {
     return root;
 }
 
-
-void printInOrder(TreeNode *root) {
-
-    if (root == NULL)
-        return;
-
-    printInOrder(root->left);
-
-    printf("%d ", root->value);
-
-    printInOrder(root->right);
-}
-
-
-
-void printPreOrder(TreeNode *root) {
-
-    if (root == NULL)
-        return;
-
-    printf("%d ", root->value);
-
-    printPreOrder(root->left);
-
-    printPreOrder(root->right);
-}
-
-
-void printPostOrder(TreeNode *root) {
-
-    if (root == NULL)
-        return;
-
-    printPostOrder(root->left);
-
-    printPostOrder(root->right);
-
-    printf("%d ", root->value);
-}
 
 
 void freeTree(TreeNode *root) {

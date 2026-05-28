@@ -6,22 +6,37 @@
 #include "matematica.h"
 
 int main() {
-    Pilha pilhaOperadores;
-    initPilha(&pilhaOperadores);
 
-    int tamanho = 10;
-    float resultado = 0.0;
+    int continuar = 1;
 
+    while (continuar) {
 
-    printf("Digite sua expressao: ");
-    char *str = userInput(tamanho);
-    str = ordenadora(str, pilhaOperadores);
-    TreeNode *arvore = inserirExpressao(str);
-    resultado = calcularExpressao(arvore);
-    printf("\nO resultado da expressao e: %f", resultado);
+        Pilha pilhaOperadores;
+        initPilha(&pilhaOperadores);
 
+        int tamanho = 10;
+        float resultado = 0.0;
 
-    free(arvore);
-    free(str);
+        printf("\nDigite sua expressao: ");
+        char *str = userInput(tamanho);
+
+        str = ordenadora(str, &pilhaOperadores);
+        printf("%s", str);
+
+        TreeNode *arvore = inserirExpressao(str);
+        resultado = calcularExpressao(arvore);
+
+        printf("\nO resultado da expressao e: %f\n", resultado);
+
+        freeTree(arvore);
+        free(str);
+        freePilha(&pilhaOperadores); //desnecessário mas ok
+
+        printf("\nDeseja continuar? (1 = sim / 0 = nao): ");
+        scanf("%d", &continuar);
+
+        getchar();
+    }
+
     return 0;
 }
