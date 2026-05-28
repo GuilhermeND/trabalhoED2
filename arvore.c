@@ -1,5 +1,3 @@
-// arvore.c
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -79,7 +77,6 @@ TreeNode *deleteNode(TreeNode *root, int value) {
 
     else {
 
-        // Node with only one child or no child
         if (root->left == NULL) {
 
             temp = root->right;
@@ -98,7 +95,6 @@ TreeNode *deleteNode(TreeNode *root, int value) {
             return temp;
         }
 
-        // Node with two children
         temp = findMin(root->right);
 
         root->value = temp->value;
