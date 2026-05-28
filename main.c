@@ -67,10 +67,23 @@ int main() {
 
         freePilha(&pilhaOperadores);
 
-        printf("\nDeseja inserir outra expressao? (1 = sim / 0 = nao): ");
-        scanf("%d", &continuar);
+        while (1) {
+            printf("\nDeseja inserir outra expressao? (1 = sim / 0 = nao): ");
+            
+            if (scanf("%d", &continuar) != 1) {
+                printf("Entrada invalida! Por favor, digite apenas o numero 0 ou 1.\n");
+                while (getchar() != '\n');
+                continue;
+            }
 
-        getchar();
+            while (getchar() != '\n');
+
+            if (continuar == 0 || continuar == 1) {
+                break;
+            } else {
+                printf("Entrada invalida! Por favor, digite apenas o numero 0 ou 1.\n");
+            }
+        }
     }
 
     printf("\n========== RESULTADOS ==========\n");
