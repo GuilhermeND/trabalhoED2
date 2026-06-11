@@ -315,9 +315,9 @@ TreeNode *inserirExpressao(char *string) {
         tamanho++;
     }
 
-    TreeNode **pilha = malloc(tamanho * sizeof(TreeNode *));
+    TreeNode **arvore = malloc(tamanho * sizeof(TreeNode *));
 
-    if (pilha == NULL) {
+    if (arvore == NULL) {
         return NULL;
     }
 
@@ -347,7 +347,7 @@ TreeNode *inserirExpressao(char *string) {
                 i++;
             }
 
-            pilha[++topo] = createNode(numero);
+            arvore[++topo] = createNode(numero);
 
             continue;
         }
@@ -357,10 +357,10 @@ TreeNode *inserirExpressao(char *string) {
 
             TreeNode *novo = createNode(c);
 
-            novo->right = pilha[topo--];
+            novo->right = arvore[topo--];
             novo->left = NULL;
 
-            pilha[++topo] = novo;
+            arvore[++topo] = novo;
         }
 
         // operadores
@@ -375,18 +375,18 @@ TreeNode *inserirExpressao(char *string) {
 
             TreeNode *novo = createNode(c);
 
-            novo->right = pilha[topo--];
-            novo->left = pilha[topo--];
+            novo->right = arvore[topo--];
+            novo->left = arvore[topo--];
 
-            pilha[++topo] = novo;
+            arvore[++topo] = novo;
         }
 
         i++;
     }
 
-    TreeNode *raiz = pilha[topo];
+    TreeNode *raiz = arvore[topo];
 
-    free(pilha);
+    free(arvore);
 
     return raiz;
 }
