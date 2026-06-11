@@ -136,7 +136,8 @@ char *ordenadora(char *string, Pilha *pilha) {
                     *(string + i - 1) == '-' ||
                     *(string + i - 1) == '*' ||
                     *(string + i - 1) == '/' ||
-                    *(string + i - 1) == '^'
+                    *(string + i - 1) == '^' ||
+                    *(string + i - 1) == '$'
                 )
             )
         ) {
@@ -236,7 +237,8 @@ char *ordenadora(char *string, Pilha *pilha) {
             c == '-' ||
             c == '*' ||
             c == '/' ||
-            c == '^'
+            c == '^' ||
+            c == '$'
         ) {
 
             int topo;
@@ -253,7 +255,8 @@ char *ordenadora(char *string, Pilha *pilha) {
                         topo == '*' ||
                         topo == '/' ||
                         topo == '^' ||
-                        topo == 'r'
+                        topo == 'r' ||
+                        topo == '$'
                     )
 
                     ||
@@ -263,7 +266,8 @@ char *ordenadora(char *string, Pilha *pilha) {
                         topo == '*' ||
                         topo == '/' ||
                         topo == '^' ||
-                        topo == 'r'
+                        topo == 'r' ||
+                        topo == '$'
                     )
                 )
             ) {
@@ -365,7 +369,8 @@ TreeNode *inserirExpressao(char *string) {
             c == '-' ||
             c == '*' ||
             c == '/' ||
-            c == '^'
+            c == '^' ||
+            c == '$'
         ) {
 
             TreeNode *novo = createNode(c);
@@ -400,13 +405,17 @@ int calcularExpressao(TreeNode *root, float *resultado) {
         return 1;
     }
 
-    // sqrt
     if (root->value == 'r') {
 
         float direita;
 
+        // Calcula o miolo de dentro da raiz primeiro
         if (!calcularExpressao(root->right, &direita)) {
             return 0;
+        }
+
+        if (direita < 0) {
+            return 0; 
         }
 
         return sqrtF(direita, resultado);
@@ -440,6 +449,7 @@ int calcularExpressao(TreeNode *root, float *resultado) {
             operacaoValida = division(esquerda, direita, resultado);
             break;
         case '^':
+        case '$':
             operacaoValida = powF(esquerda, direita, resultado);
             break;
         default:
@@ -447,9 +457,6 @@ int calcularExpressao(TreeNode *root, float *resultado) {
     }
 
     if (!operacaoValida) {
-        return 0;
-    }
-    if(*resultado < 0) {
         return 0;
     }
 
